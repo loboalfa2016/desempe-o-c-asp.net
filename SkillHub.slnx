@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="SkillHub.API/SkillHub.API.csproj" />
+  <Project Path="SkillHub.Application/SkillHub.Application.csproj" />
+  <Project Path="SkillHub.Domain/SkillHub.Domain.csproj" />
+  <Project Path="SkillHub.Infrastructure/SkillHub.Infrastructure.csproj" />
+  <Project Path="SkillHub.Tests/SkillHub.Tests.csproj" />
+  <Project Path="SkillHub.Web/SkillHub.Web.csproj" />
+</Solution>
