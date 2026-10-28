@@ -1,0 +1,94 @@
+@model List<SkillHub.Web.Models.EnrollmentViewModel>
+@{
+    ViewData["Title"] = "Mis Inscripciones";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Mis Inscripciones</h2>
+        <p class="text-muted mb-0">Gestiona tus inscripciones a talleres de SkillHub.</p>
+    </div>
+    <a asp-controller="Workshops" asp-action="Index" class="btn btn-primary">
+        + Explorar talleres
+    </a>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-warning">@ViewBag.Error</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="text-center py-5">
+        <p style="font-size: 3rem;">📋</p>
+        <h5 class="text-muted">No tienes inscripciones activas.</h5>
+        <p class="text-muted">Explora el catálogo de talleres y únete a uno hoy.</p>
+        <a asp-controller="Workshops" asp-action="Index" class="btn btn-primary mt-2">Ver talleres disponibles</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Taller</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Inscrito el</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Workshops" asp-action="Details" asp-route-id="@e.WorkshopId" class="fw-bold text-decoration-none">
+                                @e.WorkshopTitle
+                            </a>
+                        </td>
+                        <td>@e.StartDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@e.EndDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@e.EnrolledAt.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (e.Status == "Active")
+                            {
+                                <span class="badge bg-success">Activa</span>
+                            }
+                            else if (e.Status == "Cancelled")
+                            {
+                                <span class="badge bg-secondary">Cancelada</span>
+                                @if (e.CancelledAt.HasValue)
+                                {
+                                    <br /><small class="text-muted">@e.CancelledAt.Value.ToString("dd/MM/yyyy")</small>
+                                }
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">@e.Status</span>
+                            }
+                        </td>
+                        <td>
+                            @if (e.CanCancel)
+                            {
+                                <form asp-controller="Enrollments" asp-action="Cancel" method="post" class="d-inline"
+                                      onsubmit="return confirm('¿Confirma que desea cancelar esta inscripción?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@e.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

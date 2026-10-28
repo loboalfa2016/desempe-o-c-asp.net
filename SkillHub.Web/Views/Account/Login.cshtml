@@ -1,0 +1,45 @@
+@model SkillHub.Web.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <h3 class="fw-bold mb-1 text-center">🎓 SkillHub</h3>
+                <p class="text-center text-muted mb-4">Inicia sesión para acceder a tus talleres</p>
+
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+                    <div asp-validation-summary="All" class="alert alert-danger" style="display:@(ViewData.ModelState.ErrorCount > 0 ? "block" : "none")"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-bold">Correo electrónico</label>
+                        <input asp-for="Email" class="form-control" placeholder="usuario@ejemplo.com" type="email" required />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label fw-bold">Contraseña</label>
+                        <input asp-for="Password" class="form-control" placeholder="••••••••" type="password" required />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Iniciar sesión</button>
+                </form>
+
+                <hr class="my-3" />
+                <p class="text-center text-muted mb-0">
+                    ¿No tienes cuenta?
+                    <a asp-controller="Account" asp-action="Register" class="text-primary fw-bold">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

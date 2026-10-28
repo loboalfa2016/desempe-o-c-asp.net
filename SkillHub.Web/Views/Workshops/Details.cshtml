@@ -1,0 +1,103 @@
+@model SkillHub.Web.Models.WorkshopViewModel
+@{
+    ViewData["Title"] = Model?.Title ?? "Detalle del Taller";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-warning">No se encontró el taller solicitado.</div>
+    <a asp-controller="Workshops" asp-action="Index" class="btn btn-outline-secondary">← Volver al catálogo</a>
+}
+else
+{
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Workshops" asp-action="Index">Talleres</a></li>
+            <li class="breadcrumb-item active">@Model.Title</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <small class="fw-bold">@Model.Code</small>
+                </div>
+                <div class="card-body p-4">
+                    <h2 class="fw-bold mb-2">@Model.Title</h2>
+                    <p class="text-muted mb-4">@Model.Description</p>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded">
+                                <div class="small text-muted">👤 Instructor</div>
+                                <div class="fw-bold">@Model.InstructorName</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded">
+                                <div class="small text-muted">📅 Fecha de inicio</div>
+                                <div class="fw-bold">@Model.StartDateTime.ToString("dd/MM/yyyy HH:mm")</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded">
+                                <div class="small text-muted">🏁 Fecha de fin</div>
+                                <div class="fw-bold">@Model.EndDateTime.ToString("dd/MM/yyyy HH:mm")</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="p-3 bg-light rounded">
+                                <div class="small text-muted">🪑 Capacidad</div>
+                                <div class="fw-bold">@Model.Capacity participantes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 text-center">
+                    @if (Model.AvailableSeats > 0)
+                    {
+                        <div class="text-success fw-bold display-6">@Model.AvailableSeats</div>
+                        <div class="text-muted mb-3">cupos disponibles</div>
+
+                        @if (Context.Session.GetString("JwtToken") != null)
+                        {
+                            <form asp-controller="Enrollments" asp-action="Enroll" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="workshopId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                                    ✅ Inscribirse
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login"
+                               asp-route-returnUrl="/Workshops/Details/@Model.Id"
+                               class="btn btn-primary w-100 fw-bold">
+                                Iniciar sesión para inscribirse
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-danger fw-bold display-6">Sin cupos</div>
+                        <div class="text-muted mb-3">Este taller está lleno.</div>
+                        <button class="btn btn-secondary w-100" disabled>No disponible</button>
+                    }
+
+                    <hr />
+                    <a asp-controller="Workshops" asp-action="Index" class="btn btn-outline-secondary w-100">
+                        ← Volver al catálogo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,66 @@
+@model List<SkillHub.Web.Models.WorkshopViewModel>
+@{
+    ViewData["Title"] = "Talleres";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Catálogo de Talleres</h2>
+        <p class="text-muted mb-0">Explora los talleres disponibles e inscríbete hoy.</p>
+    </div>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-warning">
+        <strong>Aviso:</strong> @ViewBag.Error
+    </div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="text-center py-5">
+        <p style="font-size: 3rem;">📭</p>
+        <h5 class="text-muted">No hay talleres disponibles en este momento.</h5>
+        <p class="text-muted">Vuelva pronto, estamos preparando nuevos talleres.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var workshop in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header bg-primary text-white py-2">
+                        <small class="fw-bold">@workshop.Code</small>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">@workshop.Title</h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            @(workshop.Description.Length > 120 ? workshop.Description.Substring(0, 120) + "…" : workshop.Description)
+                        </p>
+                        <ul class="list-unstyled small text-muted mt-2 mb-3">
+                            <li>👤 <strong>Instructor:</strong> @workshop.InstructorName</li>
+                            <li>📅 <strong>Inicio:</strong> @workshop.StartDateTime.ToString("dd/MM/yyyy HH:mm")</li>
+                            <li>🏁 <strong>Fin:</strong> @workshop.EndDateTime.ToString("dd/MM/yyyy HH:mm")</li>
+                            <li>
+                                🪑 <strong>Disponibles:</strong>
+                                @if (workshop.AvailableSeats > 0)
+                                {
+                                    <span class="text-success fw-bold">@workshop.AvailableSeats de @workshop.Capacity</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger fw-bold">Sin cupos</span>
+                                }
+                            </li>
+                        </ul>
+                        <a asp-controller="Workshops" asp-action="Details" asp-route-id="@workshop.Id"
+                           class="btn btn-outline-primary btn-sm mt-auto">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

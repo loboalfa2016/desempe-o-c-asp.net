@@ -1,8 +1,77 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="py-5 text-center" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-radius: 12px; margin-bottom: 2rem;">
+    <h1 class="display-4 fw-bold">🎓 SkillHub</h1>
+    <p class="lead mb-4">La plataforma de talleres y formación profesional para impulsar tu carrera.</p>
+    <a asp-controller="Workshops" asp-action="Index" class="btn btn-light btn-lg me-2 fw-bold">
+        Ver Talleres
+    </a>
+    @if (Context.Session.GetString("JwtToken") == null)
+    {
+        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg fw-bold">
+            Registrarse
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Enrollments" asp-action="Index" class="btn btn-outline-light btn-lg fw-bold">
+            Mis Inscripciones
+        </a>
+    }
+</div>
+
+<div class="row text-center g-4 mb-5">
+    <div class="col-md-4">
+        <div class="p-4 border rounded-3 h-100 shadow-sm">
+            <div style="font-size: 2.5rem;">📚</div>
+            <h5 class="mt-3 fw-bold">Talleres Especializados</h5>
+            <p class="text-muted">Explora nuestro catálogo de talleres impartidos por instructores expertos en distintas áreas.</p>
+            <a asp-controller="Workshops" asp-action="Index" class="btn btn-outline-primary btn-sm">Ver catálogo</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-4 border rounded-3 h-100 shadow-sm">
+            <div style="font-size: 2.5rem;">✅</div>
+            <h5 class="mt-3 fw-bold">Inscripción Sencilla</h5>
+            <p class="text-muted">Regístrate en los talleres que te interesan en pocos pasos y gestiona tus inscripciones fácilmente.</p>
+            @if (Context.Session.GetString("JwtToken") == null)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-sm">Crear cuenta</a>
+            }
+            else
+            {
+                <a asp-controller="Enrollments" asp-action="Index" class="btn btn-outline-primary btn-sm">Ver mis inscripciones</a>
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-4 border rounded-3 h-100 shadow-sm">
+            <div style="font-size: 2.5rem;">🏆</div>
+            <h5 class="mt-3 fw-bold">Formación Certificada</h5>
+            <p class="text-muted">Completa los talleres y obtén el reconocimiento de tu aprendizaje con certificados de participación.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row align-items-center g-4 mb-4">
+    <div class="col-md-6">
+        <h2 class="fw-bold">¿Por qué SkillHub?</h2>
+        <p class="text-muted">SkillHub es la plataforma que conecta a profesionales con talleres de alta calidad. Aprende a tu ritmo, con los mejores instructores y en los horarios que mejor se adapten a ti.</p>
+        <ul class="list-unstyled">
+            <li class="mb-2">✔ Talleres actualizados y relevantes</li>
+            <li class="mb-2">✔ Instructores con experiencia real</li>
+            <li class="mb-2">✔ Plazas limitadas para mayor atención</li>
+            <li class="mb-2">✔ Cancelación flexible cuando sea necesario</li>
+        </ul>
+    </div>
+    <div class="col-md-6 text-center">
+        <div class="p-4 bg-light rounded-3">
+            <p class="display-6 fw-bold text-primary mb-1">+50</p>
+            <p class="text-muted">Talleres disponibles</p>
+            <p class="display-6 fw-bold text-success mb-1">+500</p>
+            <p class="text-muted">Participantes formados</p>
+        </div>
+    </div>
 </div>
