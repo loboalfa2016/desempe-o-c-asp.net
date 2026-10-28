@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkillHub.Domain\SkillHub.Domain.csproj" />
+    <ProjectReference Include="..\SkillHub.Infrastructure\SkillHub.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
